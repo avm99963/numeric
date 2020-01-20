@@ -15,7 +15,8 @@ z0 = [0; 0; v0*cos(theta0); v0*sin(theta0)];
 % APARTAT 1
 fprintf("=== APARTAT 1 ===\n\n");
 [t, X] = Euler(f, [0, 10], z0, 20);
-figure(1), plot(X(1, :), X(2, :), '-o')%, legend('x', 'y', 'x punto', 'y punto')
+figure(1), plot(X(1, :), X(2, :), '-o'), title("Apartat 1"), xlabel("x (m)"), ylabel("y (m)")%, legend('x', 'y', 'x punto', 'y punto')
+%figure(100), plot(t, X(2, :), '-o'), title("Apartat 82")%, legend('x', 'y', 'x punto', 'y punto')
 
 fprintf("Posició final:\n");
 disp(X(1:2, end));
@@ -26,6 +27,7 @@ fprintf("=== APARTAT 2 ===\n\n");
 %printf("Error absolut: %s\nError relatiu: %s\n", errabs, errrel);
 
 % APARTAT 3
+%fprintf("=== APARTAT 3 ===\n\n");
 M = 10:10:200;
 err = zeros(1, length(M));
 for i = 1:length(M)
@@ -34,7 +36,24 @@ for i = 1:length(M)
     err(i) = erreli;
 end
 
-M
-err
+figure(2), plot(log10(M), log10(err)), title("Apartat 3"), xlabel("log_{10}(m)"), ylabel("log_{10}(err)");
 
-figure(2), plot(M, err);
+% APARTAT 4
+fprintf("=== APARTAT 4 ===\n\n");
+theta0i = 0.01:0.01:(pi/2);
+disti = zeros(1, length(theta0i));
+for i = 1:length(theta0i)
+    [distii, t] = distancia(f, theta0i(i), v0);
+    disti(i) = distii;
+end
+
+[distproblema, t] = distancia(f, theta0, v0)
+
+figure(3), plot(theta0i, disti), title("Apartat 5"), xlabel("\theta_0 (rad)"), ylabel("\Delta x (m)");
+
+% APARTAT 5
+fprintf("=== APARTAT 5 ===\n\n");
+letsbringittozero = @(theta0f)(distancia(f, theta0f, v0) - 500);
+
+x1 = fsolve(letsbringittozero, 1)
+x2 = fsolve(letsbringittozero, 0.3)
